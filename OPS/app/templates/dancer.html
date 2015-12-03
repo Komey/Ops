@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>8.Dancer</title>
+	<!-- DataTables CSS -->
+	<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
+
+	<!-- jQuery -->
+	<script type="text/javascript" charset="utf8" src="https://dn-komey.qbox.me/jquery.min.js"></script>
+
+	<!-- DataTables -->
+	<script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+
+	<p>请输目录</p>
+	<form action="/dancer/dancer/" method="post">
+		目录:
+		<input type="text" id="path" name="path">
+
+		<button type="button" id='check'>查看</button>
+	</form>
+	<table id="table" class="display">
+		<thead>
+			<tr>
+				<th>名称</th>
+				<th>时间</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+	<script>
+		$(document).ready(function(){
+			var table = $('#table').DataTable();
+
+			$("#check").click(function(){
+				var path = $("#path").val();
+				$.post("/dancer/dancer/",{'path':path}, function(ret){
+
+				}).success(function(ret) {
+					var json = JSON.parse(ret);
+					var table = $('#table').DataTable();
+					table.destroy();
+					$('#table').empty();
+					table = $('#table').DataTable( {
+						data: json,
+						columns: [
+						{ data: 'name' },
+						{ data: 'time' }]
+					});
+
+				})
+			})
+		});
+	</script>
+
+</body>
+</html>
